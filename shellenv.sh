@@ -51,6 +51,8 @@ function _unset {
     fi
     unset "${backupname}"
   done
+
+  unset "${title}_VARS"
 }
 
 
@@ -61,6 +63,7 @@ function _deactivate() {
   else
     unset -f deactivate
   fi
+  unset "${ENV_TITLE}_backup_deactivate"
   _unset 
 }
 
