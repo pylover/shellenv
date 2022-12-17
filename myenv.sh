@@ -5,5 +5,5 @@
 source shellenv.sh
 
 
-shellenv_init myenv
+shellenv_init myenv $BASH_SOURCE
 shellenv_set FOO baz
