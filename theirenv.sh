@@ -1,3 +1,7 @@
+# shellenv example.
+# Usage:
+#   source theirenv.sh
+#
 source shellenv.sh
 
 
