@@ -2,7 +2,8 @@
 # Usage:
 #   source myenv.sh
 #
-source shellenv.sh
+HERE=`dirname "$(readlink -f "$BASH_SOURCE")"`
+source ${HERE}/../shellenv.sh
 
 
 shellenv_init myenv $BASH_SOURCE
