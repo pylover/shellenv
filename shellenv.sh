@@ -31,6 +31,7 @@ function shellenv_set {
 	  declare -g "${ENV_TITLE}_BACKUP_${name}=${oldvalue}"
   fi
 	declare -g "${name}=$value"
+  export ${name}
   _append ${ENV_TITLE}_VARS ${name} 
 }
 
@@ -48,6 +49,7 @@ function _unset {
       unset "${i}"
     else
       declare -g "${i}=${!backupname}"
+      export ${i}
     fi
     unset "${backupname}"
   done
