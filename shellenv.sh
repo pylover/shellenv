@@ -1,6 +1,6 @@
 
 
-SHELLENV_VERSION=1.0.0
+SHELLENV_VERSION=1.1.0
 
 
 function _fn_exists() { 
@@ -64,6 +64,9 @@ function _unset {
 
 
 function _deactivate() {
+
+  _fn_exists "shellenv_before_deactivate" && shellenv_before_deactivate
+
   local devar="${ENV_TITLE}_backup_deactivate"
   if [ ! -z "${!devar}" ]; then 
     eval "${!devar}"
@@ -72,6 +75,9 @@ function _deactivate() {
   fi
   unset "${ENV_TITLE}_backup_deactivate"
   _unset 
+
+
+  _fn_exists "shellenv_after_deactivate" && shellenv_after_deactivate
 }
 
 
