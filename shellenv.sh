@@ -1,3 +1,8 @@
+
+
+SHELLENV_VERSION=1.0.0
+
+
 function _fn_exists() { 
   declare -F "$1" > /dev/null; 
 }
