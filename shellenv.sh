@@ -28,16 +28,16 @@ function shellenv_set {
   local oldvalue=${!name}
 	local value=$2
 
-  if [ ${name} = "ENV_TITLE" ]; then
-    ENV_TITLE=${value}
+  if [ ${name} = "ENV_PREFIX" ]; then
+    ENV_PREFIX=${value}
   fi
 
   if [ ! -z "${oldvalue}" ]; then 
-	  declare -g "${ENV_TITLE}_BACKUP_${name}=${oldvalue}"
+	  declare -g "${ENV_PREFIX}_BACKUP_${name}=${oldvalue}"
   fi
 	declare -g "${name}=$value"
   export ${name}
-  _append ${ENV_TITLE}_VARS ${name} 
+  _append ${ENV_PREFIX}_VARS ${name} 
 }
 
 
@@ -45,11 +45,11 @@ function _unset {
 	local backupname
   local name
   local vars
-  local title=${ENV_TITLE}
-  _array ${title}_VARS vars
+  local prefix=${ENV_PREFIX}
+  _array ${prefix}_VARS vars
 
   for i in ${vars[@]}; do
-    backupname=${title}_BACKUP_${i}
+    backupname=${prefix}_BACKUP_${i}
     if [ -z "${!backupname}" ]; then 
       unset "${i}"
     else
@@ -59,7 +59,7 @@ function _unset {
     unset "${backupname}"
   done
 
-  unset "${title}_VARS"
+  unset "${prefix}_VARS"
 }
 
 
@@ -67,13 +67,13 @@ function _deactivate() {
 
   _fn_exists "shellenv_before_deactivate" && shellenv_before_deactivate
 
-  local devar="${ENV_TITLE}_backup_deactivate"
+  local devar="${ENV_PREFIX}_backup_deactivate"
   if [ ! -z "${!devar}" ]; then 
     eval "${!devar}"
   else
     unset -f deactivate
   fi
-  unset "${ENV_TITLE}_backup_deactivate"
+  unset "${ENV_PREFIX}_backup_deactivate"
   _unset 
 
 
@@ -83,24 +83,25 @@ function _deactivate() {
 
 function shellenv_init() {
   local title=$1
+  local prefix=${title//-/_}
 
   if [ "$0" = "$2" ]; then
   	>&2 echo "Can not run this script, try to source it"
   	exit 1
   fi
 
-  if [ "${ENV_TITLE}" = "${title}" ]; then
-    >&2 echo "Already inside ${title} environment"
+  if [ "${ENV_PREFIX}" = "${prefix}" ]; then
+    >&2 echo "Already inside ${prefix} environment"
     return 1
   fi
 
-  eval "${title}_VARS=()"
+  eval "${prefix}_VARS=()"
 
-  shellenv_set ENV_TITLE ${title}
-  shellenv_set PS1 "($ENV_TITLE) $PS1"
+  shellenv_set ENV_PREFIX ${prefix}
+  shellenv_set PS1 "($title) $PS1"
 
   _fn_exists "deactivate" && \
-    declare -g "${title}_backup_deactivate=$(declare -pf deactivate)"
+    declare -g "${prefix}_backup_deactivate=$(declare -pf deactivate)"
 
   eval "$(echo "deactivate()"; declare -f _deactivate | tail -n +2)"
   export -f deactivate
