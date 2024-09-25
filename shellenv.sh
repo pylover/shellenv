@@ -98,6 +98,7 @@ function shellenv_init() {
   eval "${prefix}_VARS=()"
 
   shellenv_set ENV_PREFIX ${prefix}
+  shellenv_set ENV_TITLE ${title}
   shellenv_set PS1 "($title) $PS1"
 
   _fn_exists "deactivate" && \
