@@ -1,8 +1,11 @@
+PREFIX ?= /usr/local/lib
+
+
 .PHONY: install
 install:
-	cp shellenv.sh /usr/local/
+	cp shellenv.sh $(PREFIX)
 
 
 .PHONY: uninstall
 uninstall:
-	rm /usr/local/shellenv.sh
+	rm $(PREFIX)/shellenv.sh
